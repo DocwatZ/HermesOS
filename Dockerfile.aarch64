@@ -72,9 +72,61 @@ RUN \
     /var/tmp/* \
     /tmp/*
 
+# Install HermesOS AI components
+RUN \
+  echo "**** install Node.js 20 and Python tooling ****" && \
+  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+  apt-get install -y --no-install-recommends \
+    git \
+    nodejs \
+    python3-pip \
+    python3-venv && \
+  echo "**** install uv ****" && \
+  curl -LsSf https://astral.sh/uv/install.sh | sh && \
+  mv /root/.local/bin/uv /usr/local/bin/uv && \
+  echo "**** install Poetry ****" && \
+  curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local python3 - && \
+  echo "**** install hermes-agent ****" && \
+  git clone --depth 1 https://github.com/NousResearch/hermes-agent.git /opt/hermes-agent && \
+  cd /opt/hermes-agent && \
+  uv venv .venv && \
+  .venv/bin/pip install --no-cache-dir -e '.[all]' && \
+  ln -sf /opt/hermes-agent/.venv/bin/hermes /usr/local/bin/hermes && \
+  echo "**** install hermelinChat ****" && \
+  git clone --depth 1 https://github.com/quarker1337/hermelinChat.git /opt/hermelinChat && \
+  cd /opt/hermelinChat && \
+  uv venv .venv && \
+  .venv/bin/pip install --no-cache-dir -e . && \
+  cd frontend && npm ci && npm run build && cd .. && \
+  ln -sf /opt/hermelinChat/.venv/bin/hermelin /usr/local/bin/hermelin && \
+  echo "**** install CloakBrowser ****" && \
+  uv venv /opt/cloakbrowser-env && \
+  /opt/cloakbrowser-env/bin/pip install --no-cache-dir cloakbrowser && \
+  echo "**** install ai-hedge-fund ****" && \
+  git clone --depth 1 https://github.com/virattt/ai-hedge-fund.git /opt/ai-hedge-fund && \
+  cd /opt/ai-hedge-fund && \
+  POETRY_VIRTUALENVS_IN_PROJECT=1 \
+  POETRY_NO_INTERACTION=1 \
+  poetry install && \
+  echo "**** cleanup ****" && \
+  apt-get autoclean && \
+  rm -rf \
+    /var/lib/apt/lists/* \
+    /var/tmp/* \
+    /tmp/* \
+    /root/.cache \
+    /root/.npm \
+    /root/.local \
+    /opt/hermelinChat/frontend/node_modules
+
 # add local files
 COPY /root /
 
+RUN \
+  chmod +x \
+    /etc/cont-init.d/50-hermes \
+    /etc/services.d/hermelinChat/run
+
 # ports and volumes
-EXPOSE 3001
+EXPOSE 3000 3001
 VOLUME /config
