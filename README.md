@@ -6,7 +6,7 @@
 
 > **HermesOS** is a Kali Linux Docker container purpose-built for AI agents. It layers four open-source AI toolsuites on top of a full KDE Plasma desktop streamed over the browser — giving [Hermes Agent](https://github.com/NousResearch/hermes-agent) a rich, persistent, browser-accessible operating environment with penetration-testing capabilities, stealth browsing, a conversational UI, and AI-driven financial analysis — all in one container.
 
-[![Hermes-Agent]([https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/kali-logo.png](https://github.com/NousResearch/hermes-agent/raw/main/assets/banner.png))](https://github.com/DocwatZ/HermesOS)
+[![Hermes-Agent](https://github.com/NousResearch/hermes-agent/raw/main/assets/banner.png)](https://github.com/DocwatZ/HermesOS)
 
 ---
 
