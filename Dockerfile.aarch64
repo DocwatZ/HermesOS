@@ -74,16 +74,17 @@ RUN \
 
 # Install HermesOS AI components
 RUN \
-  echo "**** install Node.js 20 and Python tooling ****" && \
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+  echo "**** install Node.js 22 and Python tooling ****" && \
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive \
   apt-get install -y --no-install-recommends \
     git \
     nodejs \
     python3-pip \
     python3-venv && \
   echo "**** install uv ****" && \
-  curl -LsSf https://astral.sh/uv/install.sh | sh && \
-  mv /root/.local/bin/uv /usr/local/bin/uv && \
+  curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh && \
   echo "**** install Poetry ****" && \
   curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local python3 - && \
   echo "**** install hermes-agent ****" && \
