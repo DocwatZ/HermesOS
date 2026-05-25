@@ -1,0 +1,39 @@
+#!/usr/bin/with-contenv bash
+# HermesOS first-run configuration scaffold
+
+HERMES_DIR=/config/.hermes
+HERMELIN_ENV=/config/.hermelin.env
+HEDGE_FUND_DIR=/config/ai-hedge-fund
+
+# --- hermes-agent config ---
+mkdir -p "${HERMES_DIR}"
+if [ ! -f "${HERMES_DIR}/.env" ]; then
+  cat > "${HERMES_DIR}/.env" << 'ENVEOF'
+# Hermes Agent Configuration
+# Uncomment and set one or more LLM provider API keys:
+# OPENAI_API_KEY=your-openai-api-key
+# ANTHROPIC_API_KEY=your-anthropic-api-key
+# GROQ_API_KEY=your-groq-api-key
+ENVEOF
+fi
+chown -R abc:abc "${HERMES_DIR}"
+
+# --- hermelinChat config ---
+if [ ! -f "${HERMELIN_ENV}" ]; then
+  COOKIE_SECRET=$(head -c 32 /dev/urandom | base64 | tr -d '/+=\n' | head -c 44)
+  cat > "${HERMELIN_ENV}" << HERMEOF
+# HermelinChat Configuration
+# Change HERMELIN_PASSWORD before exposing this port externally.
+HERMELIN_ALLOWED_IPS=*
+HERMELIN_PASSWORD=hermesOS
+HERMELIN_COOKIE_SECRET=${COOKIE_SECRET}
+HERMEOF
+fi
+chown abc:abc "${HERMELIN_ENV}"
+
+# --- ai-hedge-fund config ---
+mkdir -p "${HEDGE_FUND_DIR}"
+if [ ! -f "${HEDGE_FUND_DIR}/.env" ] && [ -f /opt/ai-hedge-fund/.env.example ]; then
+  cp /opt/ai-hedge-fund/.env.example "${HEDGE_FUND_DIR}/.env"
+fi
+chown -R abc:abc "${HEDGE_FUND_DIR}"
