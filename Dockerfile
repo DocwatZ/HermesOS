@@ -91,18 +91,18 @@ RUN \
   git clone --depth 1 https://github.com/NousResearch/hermes-agent.git /opt/hermes-agent && \
   cd /opt/hermes-agent && \
   uv venv .venv && \
-  .venv/bin/pip install --no-cache-dir -e '.[all]' && \
+  uv pip install --python .venv --no-cache-dir -e '.[all]' && \
   ln -sf /opt/hermes-agent/.venv/bin/hermes /usr/local/bin/hermes && \
   echo "**** install hermelinChat ****" && \
   git clone --depth 1 https://github.com/quarker1337/hermelinChat.git /opt/hermelinChat && \
   cd /opt/hermelinChat && \
   uv venv .venv && \
-  .venv/bin/pip install --no-cache-dir -e . && \
+  uv pip install --python .venv --no-cache-dir -e . && \
   cd frontend && npm ci && npm run build && cd .. && \
   ln -sf /opt/hermelinChat/.venv/bin/hermelin /usr/local/bin/hermelin && \
   echo "**** install CloakBrowser ****" && \
   uv venv /opt/cloakbrowser-env && \
-  /opt/cloakbrowser-env/bin/pip install --no-cache-dir cloakbrowser && \
+  uv pip install --python /opt/cloakbrowser-env --no-cache-dir cloakbrowser && \
   echo "**** install ai-hedge-fund ****" && \
   git clone --depth 1 https://github.com/virattt/ai-hedge-fund.git /opt/ai-hedge-fund && \
   cd /opt/ai-hedge-fund && \
