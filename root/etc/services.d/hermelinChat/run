@@ -13,4 +13,4 @@ mkdir -p /config/.hermes
 
 exec \
   s6-setuidgid abc \
-  /usr/local/bin/hermelin --host 0.0.0.0 --port 3000
+  /usr/local/bin/hermelin --host 0.0.0.0 --port 3002
