@@ -129,5 +129,5 @@ RUN \
     /etc/services.d/hermelinChat/run
 
 # ports and volumes
-EXPOSE 3000 3001
+EXPOSE 3000 3001 3002
 VOLUME /config

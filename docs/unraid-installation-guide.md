@@ -105,9 +105,9 @@ Click **Add another Path, Port, Variable, Label or Device** → **Port** for eac
 | Container Port | Host Port | Protocol | Description |
 |---|---|---|---|
 | `3001` | `3001` | TCP | Kali Desktop (HTTPS via Selkies) |
-| `3000` | `3000` | TCP | HermelinChat Web UI (HTTP) |
+| `3002` | `3002` | TCP | HermelinChat Web UI (HTTP) |
 
-> **Port conflict check:** Run `netstat -tlnp | grep -E '3000|3001'` in the Unraid terminal to verify these ports are free before starting the container.
+> **Port conflict check:** Run `netstat -tlnp | grep -E '3001|3002'` in the Unraid terminal to verify these ports are free before starting the container.
 
 ---
 
@@ -246,7 +246,7 @@ Add environment variables:
 | Service | URL | Notes |
 |---|---|---|
 | KDE Plasma Desktop | `https://YOUR-UNRAID-IP:3001/` | Full desktop — accept the self-signed cert warning |
-| HermelinChat Web UI | `http://YOUR-UNRAID-IP:3000/` | Hermes Agent browser interface |
+| HermelinChat Web UI | `http://YOUR-UNRAID-IP:3002/` | Hermes Agent browser interface |
 
 ---
 
@@ -303,7 +303,7 @@ After editing any `.env` file, **restart the container** from the Unraid Docker 
 
 ## 10. Step 9 — Using the AI Tools
 
-Once the container is running and API keys are configured, access each tool from inside the KDE desktop (port 3001) or via HermelinChat (port 3000).
+Once the container is running and API keys are configured, access each tool from inside the KDE desktop (port 3001) or via HermelinChat (port 3002).
 
 ### Hermes Agent (CLI)
 
@@ -317,7 +317,7 @@ This launches the Hermes Agent REPL. Hermes will self-improve over sessions, sto
 
 ### HermelinChat (Browser UI)
 
-Navigate to `http://YOUR-UNRAID-IP:3000/` in any browser. Log in with the password from `/config/.hermelin.env`. HermelinChat provides:
+Navigate to `http://YOUR-UNRAID-IP:3002/` in any browser. Log in with the password from `/config/.hermelin.env`. HermelinChat provides:
 
 - A live xterm.js terminal wired to the `hermes` process
 - Session history sidebar (reads from `/config/.hermes/state.db`)
@@ -374,7 +374,7 @@ To expose HermesOS securely over the internet (e.g., at `https://hermesos.yourdo
    | Domain | Forward Host | Forward Port | SSL |
    |---|---|---|---|
    | `hermesos.yourdomain.com` | `YOUR-UNRAID-IP` | `3001` | Let's Encrypt, Force SSL |
-   | `chat.yourdomain.com` | `YOUR-UNRAID-IP` | `3000` | Let's Encrypt, Force SSL |
+   | `chat.yourdomain.com` | `YOUR-UNRAID-IP` | `3002` | Let's Encrypt, Force SSL |
 
 2. Under **Advanced** for the desktop proxy, add:
 
@@ -447,7 +447,7 @@ Save this as `/boot/config/plugins/dockerMan/templates-user/HermesOS.xml` on you
 
   <!-- Ports -->
   <Config Name="Web Desktop (HTTPS)" Target="3001" Default="3001" Mode="tcp" Description="Kali KDE Plasma desktop — access via browser" Type="Port" Display="always" Required="true" Mask="false">3001</Config>
-  <Config Name="HermelinChat UI (HTTP)" Target="3000" Default="3000" Mode="tcp" Description="HermelinChat web interface for Hermes Agent" Type="Port" Display="always" Required="true" Mask="false">3000</Config>
+  <Config Name="HermelinChat UI (HTTP)" Target="3002" Default="3002" Mode="tcp" Description="HermelinChat web interface for Hermes Agent" Type="Port" Display="always" Required="true" Mask="false">3002</Config>
 
   <!-- Volumes -->
   <Config Name="Config &amp; Data" Target="/config" Default="/mnt/user/appdata/HermesOS" Mode="rw" Description="Persistent config, Hermes state/memory, KDE settings, and AI tool API keys" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/HermesOS</Config>
@@ -479,7 +479,7 @@ docker logs HermesOS
 ```
 
 Common causes:
-- **Port conflict** — another service is using 3000 or 3001. Change the host port mapping.
+- **Port conflict** — another service is using 3001 or 3002. Change the host port mapping.
 - **Insufficient memory** — ensure Docker has at least 8 GB RAM available in Unraid's settings.
 - **Missing `shm-size`** — make sure `--shm-size=1gb` is in Extra Parameters.
 
