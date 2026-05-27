@@ -11,6 +11,10 @@ fi
 # Ensure hermes directories exist
 mkdir -p /config/.hermes
 
+# Force port 3002 – port 3000 is reserved for the Selkies nginx web interface.
+# This overrides any HERMELIN_PORT value that may have been loaded above.
+export HERMELIN_PORT=3002
+
 exec \
   s6-setuidgid abc \
   /usr/local/bin/hermelin --host 0.0.0.0 --port 3002
