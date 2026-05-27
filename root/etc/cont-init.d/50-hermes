@@ -24,6 +24,7 @@ if [ ! -f "${HERMELIN_ENV}" ]; then
   cat > "${HERMELIN_ENV}" << HERMEOF
 # HermelinChat Configuration
 # Change HERMELIN_PASSWORD before exposing this port externally.
+HERMELIN_ALLOW_INSECURE_HTTP=1
 HERMELIN_ALLOWED_IPS=*
 HERMELIN_PASSWORD=hermesOS
 HERMELIN_COOKIE_SECRET=${COOKIE_SECRET}

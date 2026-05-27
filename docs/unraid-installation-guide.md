@@ -155,8 +155,11 @@ Add the following environment variables (click **Add another Path** → **Variab
 |---|---|---|
 | `CUSTOM_USER` | `hermes` | HTTP Basic auth username for the desktop |
 | `PASSWORD` | `your-strong-password` | HTTP Basic auth password for the desktop |
+| `HERMELIN_ALLOW_INSECURE_HTTP` | `1` | Allows HermelinChat to serve over plain HTTP when not using TLS certs. Required unless `HERMELIN_SSL_CERTFILE`/`HERMELIN_SSL_KEYFILE` are configured. |
 
 > **Warning:** Without `CUSTOM_USER` and `PASSWORD`, **anyone who can reach port 3001 has unauthenticated root access inside the container.** Always set these before exposing the container beyond localhost.
+>
+> If you want proper TLS for HermelinChat instead of plain HTTP, configure `HERMELIN_SSL_CERTFILE` and `HERMELIN_SSL_KEYFILE`.
 
 ### Display & Performance
 
@@ -497,6 +500,13 @@ Hermes Agent must be initialized first. Open a terminal in the KDE desktop (port
 hermes
 ```
 This creates `/config/.hermes/state.db`. Then refresh the HermelinChat page.
+
+### HermelinChat crash loop: "refusing to serve insecure HTTP"
+
+```bash
+Add HERMELIN_ALLOW_INSECURE_HTTP=1 to /mnt/user/appdata/HermesOS/.hermelin.env and restart the container.
+Alternatively, configure TLS by setting HERMELIN_SSL_CERTFILE and HERMELIN_SSL_KEYFILE to point to your certificate and key files.
+```
 
 ### hermes-agent returns API errors
 
