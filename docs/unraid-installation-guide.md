@@ -527,6 +527,25 @@ Register for a free API key at [financialdatasets.ai](https://financialdatasets.
 3. Ensure `--gpus all --runtime nvidia` is in Extra Parameters.
 4. Confirm the dummy HDMI plug is inserted into the GPU.
 
+### "Welcome to nginx!" on port 3001 (or custom HTTPS port)
+
+nginx is running but the Selkies streaming service has not started yet. Causes and fixes:
+
+1. **Normal — wait longer on first boot.** The Selkies pipeline (Xorg/Wayland → GPU encoder → WebRTC) takes 30–90 seconds to initialize. Refresh after a minute.
+2. **Wayland incompatibility.** If your CPU lacks AVX2, set `PIXELFLUX_WAYLAND=false` and restart.
+3. **GPU initialization failure.** Remove GPU env vars (`DRINODE`, `DRI_NODE`, `AUTO_GPU`) temporarily to confirm hardware is not blocking startup.
+4. **Using a non-default HTTPS port (e.g. 3311).** Set `-e CUSTOM_HTTPS_PORT=3311` (or your chosen port) and map it: `-p 3311:3311`. Do **not** map it to 3001 — nginx only binds the port configured in `CUSTOM_HTTPS_PORT`.
+
+### HermelinChat error: `PermissionError: [Errno 13] Permission denied: '/config/.hermes/cron'`
+
+This was caused by the `/config/.hermes` directory being created root-owned before the `abc` user could write subdirectories. It is fixed in the current image. If you are running an older image, either rebuild or manually fix permissions:
+
+```bash
+docker exec -it HermesOS chown -R abc:abc /config/.hermes
+```
+
+Then restart the container.
+
 ### Self-signed certificate warning in browser
 
 This is expected when accessing port 3001 directly. Accept the certificate exception in your browser, or set up a proper TLS certificate via a reverse proxy ([Step 10](#11-step-10--reverse-proxy--https-swagnginx-proxy-manager)).
